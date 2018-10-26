@@ -1,0 +1,57 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+
+  <script type="text/javascript">
+    /* Article FructCode.com */
+    $( document ).ready(function() {
+    $("#btn").click(
+            function(){
+                sendAjaxForm('result_form', 'ajax_form', 'http://localhost:3000/api/login');
+                return false; 
+            }
+        );
+    });
+ 
+    function sendAjaxForm(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, //url страницы (action_ajax_form.php)
+            type:     "POST", //метод отправки
+            //dataType: "html", //формат данных
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                localStorage.setItem('Token', response.token);
+                $('#result_form').html("Token: "+response.token);
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html(response.responseText);
+            }
+        });
+    }
+
+  </script>
+
+</head>
+
+<body>
+    <form method="post" id="ajax_form" action="" >
+        <input type="text" name="email" placeholder="YOUR EMAIL" /><br>
+        <input type="password" name="password" placeholder="YOUR PASSWORD" /><br>
+        <input type="button" id="btn" value="Login" />
+    </form>
+
+    <br>
+
+    <div id="result_form"><div> 
+</body>
+</html>
+
+

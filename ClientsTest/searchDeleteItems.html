@@ -1,0 +1,141 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+
+  <script type="text/javascript">
+    /* Article FructCode.com */
+    $( document ).ready(function() {
+        $("#btn").click(
+            function(){
+                sendAjaxForm('result_form', 'ajax_form', 'http://localhost:3000/api/item');
+                return false; 
+            }
+        );
+
+
+        $("#btnItemId").click(
+            function(){
+                sendAjaxFormItemId('result_form', 'ajax_form_itemID', 'http://localhost:3000/api/item/'+$('#itemID').val());
+                return false; 
+            }
+        );
+
+
+        $("#btnDeleteItemId").click(
+            function(){
+                sendAjaxFormDeleteItemId('result_form', 'ajax_form_itemID', 'http://localhost:3000/api/item/'+$('#itemID').val());
+                return false; 
+            }
+        );
+
+        $("#btnDeleteImage").click(
+            function(){
+                sendAjaxFormDeleteItemId('result_form_', 'ajax_form_uploud_image', 'http://localhost:3000/api/item/'+$('#itemID').val()+'/image');
+                return false; 
+            }
+        );
+    });
+ 
+    function sendAjaxForm(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, //url страницы (action_ajax_form.php)
+            type:     "GET", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                console.log(response);
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html('Ошибка. Данные не отправлены.');
+            }
+        });
+    }
+
+
+    function sendAjaxFormItemId(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, //url страницы (action_ajax_form.php)
+            type:     "GET", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                console.log(response);
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html('Ошибка. Данные не отправлены.');
+            }
+        });
+    }
+
+
+    function sendAjaxFormDeleteItemId(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, //url страницы (action_ajax_form.php)
+            type:     "DELETE", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                console.log(response);
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html('Ошибка. Данные не отправлены.');
+            }
+        });
+    }
+
+  </script>
+
+</head>
+
+<body>
+    <form method="get" id="ajax_form" action="" >
+        <input type="text" name="title" placeholder="TITLE" /><br>
+        <input type="text" name="user_id" placeholder="USER ID" /><br>
+        <input type="text" name="order_by" placeholder="ORDER BY (PR1|PR2|etc)" /><br>
+        <input type="text" name="order_type" placeholder="ORDER BY (ASC|DESC)" /><br>
+        <input type="button" id="btn" value="Get Items" />
+    </form>
+
+    <br>
+
+
+    <form method="get" id="ajax_form_itemID" action="" >
+        <input type="text" id="itemID" name="item_id" placeholder="ITEM ID" /><br>
+        <input type="button" id="btnItemId" value="Get Item by ID" /><br>
+        <input type="button" id="btnDeleteItemId" value="DELETE Item by ID" />
+        <input type="button" id="btnDeleteImage" value="DELETE Image by ID" />
+    </form>
+
+    <br>
+
+    <div id="result_form"><div> 
+</body>
+</html>
+
+

@@ -1,0 +1,78 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.1.62/jquery.inputmask.bundle.js"></script>
+
+
+
+  <script type="text/javascript">
+    /* Article FructCode.com */
+    $( document ).ready(function() {
+
+        var phones = [{ "mask": "+38(###)###-##-##"}];
+        $('#phone').inputmask({ 
+            mask: phones, 
+            greedy: false, 
+            definitions: { '#': { validator: "[0-9]", cardinality: 1}} 
+        });
+
+
+        $('#phone').keyup(function() {
+            $(this).val($(this).val().replace(/^(\d{3})(\d{3})(\d)+$/, "($1)$2-$3"));
+        });
+
+        $("#btn").click(
+            function(){
+                sendAjaxForm('result_form', 'ajax_form', 'http://localhost:3000/api/me');
+                return false; 
+            }
+        );
+    });
+ 
+    function sendAjaxForm(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, //url страницы (action_ajax_form.php)
+            type:     "PUT", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                $('#result_form').html('id: '+ response.id +'<br>email: '+ response.email + '<br>name: '+ response.name+ '<br>phone: '+ response.phone) ;
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html(response.responseText);
+            }
+        });
+    }
+
+  </script>
+
+</head>
+
+<body>
+    <form method="post" id="ajax_form" action="" >
+        <input type="text" name="name" placeholder="NAME" /><br>
+        <input type="text" id="phone" name="phone" placeholder="YOUR PHONE" /><br>
+        <input type="text" name="email" placeholder="YOUR EMAIL" /><br>
+        <input type="password" name="password" placeholder="YOUR PASSWORD" /><br>
+        <input type="button" id="btn" value="Update user" />
+    </form>
+
+    <br>
+
+    <div id="result_form"><div> 
+</body>
+</html>
+
+

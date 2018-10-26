@@ -1,0 +1,50 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <script type="text/javascript">
+            function myFunction(){
+				$.ajax({
+            		type : 'GET',
+            		//remove the .php from results.php.php
+            		url : "http://localhost:3000/api/me",
+            		 headers : {
+                		Authorization : localStorage.getItem('Token')
+            		},
+
+            		success : function(response) {
+                		$('#result_form').html('id: '+ response.id +'<br>email: '+ response.email + '<br>name: '+ response.name+ '<br>phone: '+ response.phone) ;
+            		},
+            		error : function(xhr, status, error) {
+                		var err = eval("(" + xhr.responseText + ")");
+    
+                        $('#result_form').html(err);                
+            		}
+        		}); //End of Ajax
+			}   // End of myFucntion
+          
+        </script>
+
+
+    </head>
+    <body>
+        
+        <form name="form" id="form">
+            <br /><br />
+            <input type="button" name="done" onclick="return myFunction()" id="done" value="me" />
+        </form>
+        <br>
+        <br>
+
+        <div id='result_form'><div>
+
+
+        <br>
+        <br>
+
+    </body>
+</html>
+

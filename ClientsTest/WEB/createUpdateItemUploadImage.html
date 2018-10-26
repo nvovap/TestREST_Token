@@ -1,0 +1,133 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+ 
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+
+  <script type="text/javascript">
+    /* Article FructCode.com */
+    $( document ).ready(function() {
+        $("#btn").click(
+            function(){
+                sendAjaxForm('result_form', 'ajax_form', 'http://localhost:3000/api/item');
+                return false; 
+            }
+        );
+
+        $("#btnUploadImage").click(
+            function(){
+                sendAjaxFormUpload('result_form_', 'ajax_form_uploud_image', 'http://localhost:3000/api/item/'+$('#itemID').val()+'/image');
+                return false; 
+            }
+        );
+
+
+         $("#btnUpdateItemId").click(
+            function(){
+                sendAjaxForm('result_form', 'ajax_form', 'http://localhost:3000/api/item/'+$('#itemID').val());
+                return false; 
+            }
+        );
+   
+    });
+
+
+
+ 
+    function sendAjaxForm(result_form, ajax_form, url) {
+        $.ajax({
+            url:     url, 
+            type:     "PUT", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+            data: $("#"+ajax_form).serialize(),  // Сеарилизуем объект
+
+            success: function(response) { //Данные отправлены успешно
+                console.log(response);
+
+                $('#itemID').val(response.id);
+
+                 $('#result_form').html('OK');
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html('Error : ' + response.responseText);
+            }
+        });
+    }
+
+
+    function sendAjaxFormUpload(result_form, ajax_form, url) {
+
+       // var formdata = $("#"+ajax_form)
+
+         var formData = new FormData();
+         formData.append('file', $('#imageID')[0].files[0]);
+
+        //var formData = new FormData($('#imageID'));
+
+
+        //console.log(formData);
+
+        $.ajax({
+            url:     url, 
+            type:     "POST", //метод отправки
+    
+            headers : {
+                Authorization : localStorage.getItem('Token')
+            },
+
+
+           
+
+            //console.log(formdata)
+
+            data:  formData, 
+
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType 
+
+            success: function(response) { //Данные отправлены успешно
+                console.log(response)
+                $('#result_form').html("Image Uploaded");
+            },
+            error: function(response) { // Данные не отправлены
+                $('#result_form').html(response.responseText);
+            }
+        });
+    }
+
+  </script>
+
+</head>
+
+<body>
+    <form method="put" id="ajax_form" action="" >
+        <input type="text" name="title" placeholder="TITLE" /><br>
+        <textarea id="textarea" name="description" cols="30" rows="10"  placeholder="DESCRIPTION"></textarea><br>
+        <input type="button" id="btn" value="Create Item" />
+    </form>
+
+    <form method="post" id="ajax_form_uploud_image" action="" >
+        <input type="text" id="itemID" name="itemID" placeholder="item ID" /><br>
+        <input type="button" id="btnUpdateItemId" value="Update Item by ID" /><br>
+        <input type="file" id="imageID" name="image" placeholder="IMAGE" /><br>
+        <input type="button" id="btnUploadImage" value="Upload Image" /><br>
+    </form>
+
+    <br>
+
+    <div id="result_form"><div> 
+</body>
+</html>
+
+
